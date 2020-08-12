@@ -82,7 +82,7 @@
 import Vue from 'vue';
 import cabecalho from './cabecalho';
 import rodape from './rodape';
-import {runLogin, runCadastro} from '../resources/services.js';
+import {runLogin, runCadastro} from '../services/services.js';
 
 export default{
   name: 'login_cadastro',
@@ -122,12 +122,14 @@ export default{
         senha: this.senha,
         telefone: this.telefone,
         cpf: this.cpf,
-        rua: this.rua,
-        numero: this.numero,
-        referencia: this.referencia,
-        bairro: this.bairro,
-        cidade: this.cidade,
-        uf: this.uf
+        endereco: {
+          rua: this.rua,
+          numero: this.numero,
+          referencia: this.referencia,
+          bairro: this.bairro,
+          cidade: this.cidade,
+          uf: this.uf
+        }
       }
 
       runCadastro(params).then(cadastro => {
@@ -148,9 +150,7 @@ export default{
       }
 
       runLogin(params).then(sessao => {
-
         if (sessao.cliente) {
-          this.msgLog = "BEM-VINDO!";
           this.temSessao = true;
 
           window.sessionStorage.setItem('cliente', JSON.stringify(sessao.cliente));

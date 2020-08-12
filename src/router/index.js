@@ -7,6 +7,7 @@ import carrinho from '@/components/carrinho'
 import produto from '@/components/produto'
 import pesquisa from '@/components/pesquisa'
 import categoria from '@/components/categoria'
+import pedido from '@/components/pedido'
 import barraADM from '@/components/barraADM'
 import painelADM from '@/components/painelADM'
 import perfilADM from '@/components/perfilADM'
@@ -43,6 +44,10 @@ export default new Router({
     {
       path: '/categoria',
       component: categoria
+    },
+    {
+      path: '/pedido',
+      component: pedido
     },
     {
       path: '/barraADM',

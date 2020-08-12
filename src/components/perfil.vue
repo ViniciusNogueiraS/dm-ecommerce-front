@@ -29,27 +29,27 @@
           <th colspan="2">Endereço</th>
           <tr>
             <td>Rua</td>
-            <td class="table-value">{{cliente.rua}}</td>
+            <td class="table-value">{{cliente.endereco.rua}}</td>
           </tr>
           <tr>
             <td>Número</td>
-            <td class="table-value">{{cliente.numero}}</td>
+            <td class="table-value">{{cliente.endereco.numero}}</td>
           </tr>
           <tr>
             <td>Referência</td>
-            <td class="table-value">{{cliente.referencia}}</td>
+            <td class="table-value">{{cliente.endereco.referencia}}</td>
           </tr>
           <tr>
             <td>Bairro</td>
-            <td class="table-value">{{cliente.bairro}}</td>
+            <td class="table-value">{{cliente.endereco.bairro}}</td>
           </tr>
           <tr>
             <td>Cidade</td>
-            <td class="table-value">{{cliente.cidade}}</td>
+            <td class="table-value">{{cliente.endereco.cidade}}</td>
           </tr>
           <tr>
             <td>UF</td>
-            <td class="table-value">{{cliente.uf}}</td>
+            <td class="table-value">{{cliente.endereco.uf}}</td>
           </tr>
         </tbody>
       </table>
