@@ -1,27 +1,27 @@
 <template>
   <div class="produto">
     <cabecalho></cabecalho>
-    <div class="container">
-      <h1>{{nome}}</h1>
+    <div class="container" v-if="produto != null">
+      <h1>{{produto.nome}}</h1>
       <table>
         <tbody>
           <tr>
-            <td rowspan="6"><img :src="'http://localhost:3000/images/'+imagem" width="420" height="420"></td>
-            <td><b>Categoria: </b>{{categoria}}</td>
+            <td rowspan="6"><img :src="'http://localhost:3000/images/'+produto.imagem" width="420" height="420"></td>
+            <td><b>Categoria: </b>{{produto.categoria}}</td>
           </tr>
           <tr>
-            <td><b>Desconto: </b>{{desconto}}%</td>
+            <td><b>Desconto: </b>{{produto.desconto}}%</td>
           </tr>
           <tr>
             <td><b>Preço: </b>
-              <p v-if="desconto <= 0">
-                {{preco | currency}}
+              <p v-if="produto.desconto <= 0">
+                {{produto.preco | currency}}
               </p>
               <strike class="precoSD" v-else>
-                {{preco | currency}}
+                {{produto.preco | currency}}
               </strike>
-              <p v-if="desconto > 0">
-                {{precoDescontado | currency}}
+              <p v-if="produto.desconto > 0">
+                {{produto.preco_descontado | currency}}
               </p>
             </td>
           </tr>
@@ -49,13 +49,13 @@
           </tr>
           <tr>
             <td>
-              <button class="btn btn-success" type="button"><h2>Comprar</h2></button>
+              <button class="btn btn-success" @click="comprar()">Comprar</button>
             </td>
           </tr>
           <tr>
             <td colspan="2">
               <b>Mais sobre este produto:</b><br><br>
-              <p>{{descricao}}</p>
+              <p>{{produto.descricao}}</p>
             </td>
           </tr>
         </tbody>
@@ -70,8 +70,8 @@ import Vue from 'vue';
 import cabecalho from './cabecalho';
 import rodape from './rodape';
 import eventBus from '../resources/eventBus.vue';
-import {calculaDesconto} from '../resources/helpers.js';
-import {getProdutoById, getCarrinho, inserirAoCarrinho, retirarDoCarrinho} from '../resources/services.js';
+import Produto from '../models/Produto.js';
+import {getProdutoById, getConfirmaCarrinho, inserirAoCarrinho, retirarDoCarrinho} from '../services/services.js';
 
 export default {
   name: 'produto',
@@ -83,66 +83,44 @@ export default {
     return {
       temSessao: false,
       estaNoCarrinho: false,
-      idproduto: null,
-      nome: '',
-      categoria: '',
-      preco: 0,
-      desconto: 0,
-      precoDescontado: 0,
-      descricao: '',
-      imagem: '',
+      produto: null,
       quantidade: 1,
-      pedido: null,//o produto + sua respectiva quantidade
       loadB: false
     }
   },
   mounted: function(){
-    this.loadProduto();
-  },
-  methods: {
-    loadProduto: function(){
-      var params = {
-        idproduto: parseInt(this.$route.query.idproduto)
+    var params = {
+      idproduto: parseInt(this.$route.query.idproduto)
+    }
+    
+    getProdutoById(params).then(produto => {
+      this.produto = produto[0];
+    })
+    .catch(({response}) => {
+      console.log(response);
+    });
+
+    var cliente = JSON.parse(window.sessionStorage.getItem('cliente'));
+    this.temSessao = !!cliente;
+
+    if (this.temSessao) {
+
+      params = {
+        id_cliente: cliente.idusuario,
+        id_produto: parseInt(this.$route.query.idproduto)
       }
 
-      getProdutoById(params).then(produto => {
-        this.idproduto = produto[0].idproduto;
-        this.nome = produto[0].nome;
-        this.categoria = produto[0].categoria;
-        this.preco = produto[0].preco;
-        this.desconto = produto[0].desconto;
-        this.descricao = produto[0].descricao;
-        this.imagem = produto[0].imagem;
-
-        if(this.desconto > 0){
-          this.precoDescontado = calculaDesconto(this.preco, this.desconto);
-        }
+      getConfirmaCarrinho(params).then(confirma => {// confirma se está no carrinho (true or false)
+        this.estaNoCarrinho = confirma;
       })
       .catch(({response}) => {
         console.log(response);
       });
-
-      var cliente = JSON.parse(window.sessionStorage.getItem('cliente'));
-      this.temSessao = !!cliente;
-
-      if (this.temSessao) {
-
-        params = {
-          id_cliente: cliente.idusuario,
-          id_produto: parseInt(this.$route.query.idproduto)
-        }
-
-        getCarrinho(params).then(produto => {
-          this.estaNoCarrinho = produto;
-        })
-        .catch(({response}) => {
-          console.log(response);
-        });
-      }
-    },
+    }
+  },
+  methods: {
     addAoCarrinho: function(){
       this.loadB = true;
-      eventBus.$emit("addCar");
 
       var params = {
         id_cliente: JSON.parse(window.sessionStorage.getItem('cliente')).idusuario,
@@ -150,8 +128,9 @@ export default {
       }
 
       inserirAoCarrinho(params).then(inCarrinho => {
-        this.loadProduto();
         this.loadB = false;
+        eventBus.$emit("addCar");
+        this.estaNoCarrinho = true;
       })
       .catch(({response}) => {
         console.log(response);
@@ -160,7 +139,6 @@ export default {
     },
     removeDoCarrinho: function(){
       this.loadB = true;
-      eventBus.$emit("remCar");
 
       var params = {
         id_cliente: JSON.parse(window.sessionStorage.getItem('cliente')).idusuario,
@@ -168,13 +146,17 @@ export default {
       }
 
       retirarDoCarrinho(params).then(remCarrinho => {
-        this.loadProduto();
         this.loadB = false;
+        eventBus.$emit("remCar");
+        this.estaNoCarrinho = false;
       })
       .catch(({response}) => {
         console.log(response);
         this.loadB = false;
       });
+    },
+    comprar: function(){
+      this.$router.push('/pedido?idproduto='+this.produto.idproduto+'&quantidade='+this.quantidade);
     }
   }
 }

@@ -18,17 +18,23 @@
           <div class="input-group-prepend">
             <span class="input-group-text" id="basic-addon1">R$</span>
           </div>
-            <input type="number" class="form-control" min="0" step="0.01" v-model="preco" aria-describedby="basic-addon1">
+            <input type="number" class="form-control" @change="calculaPrecoDescontado()" min="0" step="0.01" v-model="preco" aria-describedby="basic-addon1">
         </div>
         <label>Desconto</label>
         <div class="input-group mb-3">
           <div class="input-group-prepend">
             <span class="input-group-text" id="basic-addon1">%</span>
           </div>
-            <input class="form-control" type="number" min="0" max="100" v-model="desconto">
+            <input class="form-control" @change="calculaPrecoDescontado()" type="number" min="0" max="100" v-model="desconto">
+        </div>
+        <label>Preço Descontado</label>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <label class="form-control">{{preco_descontado | currency}}</label>
+          </div>
         </div>
         <div id="imgInput" class="input-group mb-3">
-          <img id="output" :src="srcImg" height="270" width="270"/>
+          <img id="output" :src="srcImg" height="325" width="325"/>
           <div class="custom-file">
             <input type="file" @change="onSelectFile" class="custom-file-input" id="inputGroupFile03" aria-describedby="inputGroupFileAddon03">
             <label class="custom-file-label" for="inputGroupFile03">Selecione a imagem</label>
@@ -52,7 +58,8 @@
 <script content-type="text/javascript">
 import Vue from 'vue';
 import barraADM from './barraADM';
-import {getProdutoById, inserirProduto, uploadProdutoById, upImagem} from '../resources/services.js';
+import {getProdutoById, inserirProduto, uploadProdutoById, upImagem} from '../services/services.js';
+import {calculaDesconto} from '../resources/helpers.js';
 
 export default {
   name: 'cadastroProdutoADM',
@@ -68,6 +75,7 @@ export default {
       categoria: 'Acessórios',
       preco: 0,
       desconto: 0,
+      preco_descontado: 0,
       descricao: '',
       imagem: '',
       srcImg: '',
@@ -89,6 +97,7 @@ export default {
         this.categoria = produto[0].categoria;
         this.preco = produto[0].preco;
         this.desconto = produto[0].desconto;
+        this.preco_descontado = produto[0].preco_descontado;
         this.descricao = produto[0].descricao;
         this.imagem = produto[0].imagem;
 
@@ -103,6 +112,8 @@ export default {
     onSelectFile(event){
       this.imagem = event.target.files[0];
       this.srcImg = URL.createObjectURL(this.imagem);
+
+      $('#imgInput .custom-file label')[0].innerHTML = this.imagem.name;
     },
     cadastrar: function(){
       this.loadC = true;
@@ -117,6 +128,7 @@ export default {
           categoria: this.categoria,
           preco: this.preco,
           desconto: this.desconto,
+          preco_descontado: this.preco_descontado,
           descricao: this.descricao,
           imagem: upload.filename
         }
@@ -151,6 +163,7 @@ export default {
             categoria: this.categoria,
             preco: this.preco,
             desconto: this.desconto,
+            preco_descontado: this.preco_descontado,
             descricao: this.descricao,
             imagem: upload.filename
           }
@@ -177,6 +190,7 @@ export default {
           categoria: this.categoria,
           preco: this.preco,
           desconto: this.desconto,
+          preco_descontado: this.preco_descontado,
           descricao: this.descricao,
           imagem: this.imagem
         }
@@ -191,6 +205,9 @@ export default {
         });
       }
       this.$router.push('/painelADM');
+    },
+    calculaPrecoDescontado: function(){
+      this.preco_descontado = calculaDesconto(this.preco, this.desconto);
     }
   }
 }
@@ -216,18 +233,16 @@ h1{
 }
 #imgInput{
   position: absolute;
-  left: 55%;
+  left: 60%;
   top: 7.5rem;
 }
-#imgInput img{
-  position: absolute;
-  margin-top: 2.2rem;
-  left: 1.8rem;
+#output{
+  margin-top: 2.4rem;
 }
 #imgInput .custom-file{
   position: absolute;
   cursor: pointer;
-  width: 40%;
+  width: fit-content;
 }
 #imgInput .custom-file-input{
   width: 85%;

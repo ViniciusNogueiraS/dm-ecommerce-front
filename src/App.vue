@@ -18,11 +18,11 @@ export default {
 
 <style>
 #ecommerce-logo{
-  font-size: 1.8rem;
+  font-size: 2.1rem;
 }
 #ecommerce-logo svg{
   font-size: 2.2rem;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.4rem;
 }
 h1{
   margin-top: 2rem;

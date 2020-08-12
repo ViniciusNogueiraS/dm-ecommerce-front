@@ -1,4 +1,7 @@
 import axios from "axios";
+import { receptProdutos } from "./serviceProduto";
+import { receptCarrinho } from "./serviceCarrinho";
+import { receptSessao } from "./serviceSessao";
 
 export function runLogin(params){
   return axios({
@@ -7,7 +10,7 @@ export function runLogin(params){
     baseURL: 'http://localhost:3000/',
     data: params
   })
-  .then(response => response.data);
+  .then(response => receptSessao(response.data));
 }
 
 export function runLogout(){
@@ -39,7 +42,7 @@ export function getProdutos(params){
     baseURL: 'http://localhost:3000/',
     params
   })
-  .then(response => response.data);
+  .then(response => receptProdutos(response.data));
 }
 
 export function getProdutoById(params){
@@ -49,7 +52,7 @@ export function getProdutoById(params){
     baseURL: 'http://localhost:3000/',
     params
   })
-  .then(response => response.data);
+  .then(response => receptProdutos(response.data));
 }
 
 export function getProdutosByCategoria(params){
@@ -58,6 +61,95 @@ export function getProdutosByCategoria(params){
     url: 'produto',
     baseURL: 'http://localhost:3000/',
     params
+  })
+  .then(response => receptProdutos(response.data));
+}
+
+export function pesquisar(params){
+  return axios({
+    method: 'GET',
+    url: 'produto',
+    baseURL: 'http://localhost:3000/',
+    params,
+  })
+  .then(response => receptProdutos(response.data));
+}
+
+export function inserirProduto(params){
+  return axios({
+    method: 'POST',
+    url: 'produtoADM',
+    baseURL: 'http://localhost:3000/',
+    data: params,
+    headers: {
+      'x-access-token': window.sessionStorage.getItem('token')
+    }
+  })
+  .then(response => response.data);
+}
+
+export function upImagem(file){
+  return axios({
+    method: 'POST',
+    url: 'uploadProfile',
+    baseURL: 'http://localhost:3000/',
+    data: file,
+    headers: {
+      'x-access-token': window.sessionStorage.getItem('token'),
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+  .then(response => response.data);
+}
+
+export function getCarrinho(params){
+  return axios({
+    method: 'GET',
+    url: 'carrinho',
+    baseURL: 'http://localhost:3000/',
+    params,
+    headers: {
+      'x-access-token': window.sessionStorage.getItem('token')
+    }
+  })
+  .then(response => receptCarrinho(response.data));
+}
+
+export function getConfirmaCarrinho(params){
+  return axios({
+    method: 'GET',
+    url: 'confirmaCarrinho',
+    baseURL: 'http://localhost:3000/',
+    params,
+    headers: {
+      'x-access-token': window.sessionStorage.getItem('token')
+    }
+  })
+  .then(response => response.data);
+}
+
+export function inserirAoCarrinho(params){
+  return axios({
+    method: 'POST',
+    url: 'carrinho',
+    baseURL: 'http://localhost:3000/',
+    data: params,
+    headers: {
+      'x-access-token': window.sessionStorage.getItem('token')
+    }
+  })
+  .then(response => response.data);
+}
+
+export function retirarDoCarrinho(params){
+  return axios({
+    method: 'DELETE',
+    url: 'carrinho',
+    baseURL: 'http://localhost:3000/',
+    params,
+    headers: {
+      'x-access-token': window.sessionStorage.getItem('token')
+    }
   })
   .then(response => response.data);
 }
@@ -88,99 +180,10 @@ export function deleteProdutoById(params){
   .then(response => response.data);
 }
 
-export function getCarrinho(params){
-  return axios({
-    method: 'GET',
-    url: 'carrinho',
-    baseURL: 'http://localhost:3000/',
-    params,
-    headers: {
-      'x-access-token': window.sessionStorage.getItem('token')
-    }
-  })
-  .then(response => response.data);
-}
-
-export function getCountCarrinho(params){
-  return axios({
-    method: 'GET',
-    url: 'quantidadeCarrinho',
-    baseURL: 'http://localhost:3000/',
-    params,
-    headers: {
-      'x-access-token': window.sessionStorage.getItem('token')
-    }
-  })
-  .then(response => response.data);
-}
-
 export function getClientes(params){
   return axios({
     method: 'GET',
     url: 'cliente',
-    baseURL: 'http://localhost:3000/',
-    params,
-    headers: {
-      'x-access-token': window.sessionStorage.getItem('token')
-    }
-  })
-  .then(response => response.data);
-}
-
-export function inserirAoCarrinho(params){
-  return axios({
-    method: 'POST',
-    url: 'carrinho',
-    baseURL: 'http://localhost:3000/',
-    data: params,
-    headers: {
-      'x-access-token': window.sessionStorage.getItem('token')
-    }
-  })
-  .then(response => response.data);
-}
-
-export function pesquisar(params){
-  return axios({
-    method: 'GET',
-    url: 'produto',
-    baseURL: 'http://localhost:3000/',
-    params,
-  })
-  .then(response => response.data);
-}
-
-export function inserirProduto(params){
-  return axios({
-    method: 'POST',
-    url: 'produtoADM',
-    baseURL: 'http://localhost:3000/',
-    data: params,
-    headers: {
-      'x-access-token': window.sessionStorage.getItem('token')
-    }
-  })
-  .then(response => response.data);
-}
-
-export function upImagem(file){
-  return axios({
-    method: 'POST',
-    url: 'uploadProfile',
-    baseURL: 'http://localhost:3000/',
-    data: file,
-    headers: {
-      'x-access-token': window.sessionStorage.getItem('token'),
-      'Content-Type': 'multipart/form-data'
-    }
-  })
-  .then(response => response.data);
-}
-
-export function retirarDoCarrinho(params){
-  return axios({
-    method: 'DELETE',
-    url: 'carrinho',
     baseURL: 'http://localhost:3000/',
     params,
     headers: {

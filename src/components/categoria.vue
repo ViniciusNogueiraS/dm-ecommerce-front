@@ -21,7 +21,7 @@
 import Vue from 'vue';
 import cabecalho from './cabecalho';
 import rodape from './rodape';
-import {getProdutosByCategoria} from '../resources/services.js';
+import {getProdutosByCategoria} from '../services/services.js';
 
 export default {
   name: 'pesquisa',

@@ -24,7 +24,7 @@
 import Vue from 'vue';
 import cabecalho from './cabecalho';
 import rodape from './rodape';
-import {pesquisar} from '../resources/services.js';
+import {pesquisar} from '../services/services.js';
 
 export default {
   name: 'pesquisa',
