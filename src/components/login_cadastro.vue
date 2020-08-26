@@ -27,7 +27,7 @@
         <input class="form-control" type="password" placeholder="Senha" v-model="senha">
         <input class="form-control" type="text" placeholder="Telefone" v-model="telefone">
         <input class="form-control" type="text" placeholder="CPF" v-model="cpf">
-        <b>Endereço</b><br><br>
+        <h2>Endereço</h2>
         <div id="msgCad" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="8000">
           <div class="toast-body">
             {{msgCad}}
@@ -38,7 +38,7 @@
         <input class="form-control" type="text" placeholder="Referência" v-model="referencia">
         <input class="form-control" type="text" placeholder="Bairro" v-model="bairro">
         <input class="form-control" type="text" placeholder="Cidade" v-model="cidade">
-        <select class="form-control" v-model="uf">
+        <select class="custom-select" v-model="uf">
             <option v-bind:value="'AC'" :selected="true">AC</option>
             <option v-bind:value="'AL'">AL</option>
             <option v-bind:value="'AP'">AP</option>
@@ -66,7 +66,7 @@
             <option v-bind:value="'SP'">SP</option>
             <option v-bind:value="'SE'">SE</option>
             <option v-bind:value="'TO'">TO</option>
-          </select>
+          </select><br>
         <button class="btn btn-success" type="button" @click="cadastrar">
           Cadastrar
           <div v-if="loadC" class="spinner-border spinner-border-sm" role="status"></div>
@@ -179,12 +179,11 @@ export default{
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.form-control{
-  margin-bottom: 1rem;
-  width: 50%;
-}
 #cad{
-  margin-bottom: 2rem;
+  margin-bottom: 2vw;
+}
+h2{
+  padding-bottom: 1.5vh;
 }
 .toast{
   position: absolute;

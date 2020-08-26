@@ -51,12 +51,9 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .cards1 .container{
-  padding-bottom: 3rem;
+  padding-bottom: 3vh;
 }
-.off{
-  position: absolute;
-  top: 1%;
-  left: 2%;
-  color: rgba(255, 0, 0, 0.7);
+.cards1{
+  display: contents;
 }
 </style>

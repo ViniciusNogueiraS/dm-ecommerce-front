@@ -156,9 +156,9 @@ export default {
   font-weight: bold;
 }
 table td{
-  padding: 0.3rem;
+  padding: 0.3vw;
   text-align: center;
-  font-size: 1rem;
+  font-size: 1vw;
 }
 table thead{
   font-weight: bold;
