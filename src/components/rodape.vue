@@ -1,16 +1,13 @@
 <template>
   <footer class="rodape" v-bind:style="{position: positionFooter()}">
     <div class="container">
-      <ul class="nav">
+      <ul class="hf">
         <li><router-link to="/">ECOMMERCE</router-link></li>
         <li><router-link to="/ofertas">OFERTAS</router-link></li>
         <li><router-link to="/lacamentos">LANÇAMENTOS</router-link></li>
       </ul>
       <label>Fale Conosco
-        <ul>
-          <li>v.nog@outlook.com</li>
-          <li>(22) 99738-7803</li>
-        </ul>
+        <p>v.nog@outlook.com / (22) 99738-7803</p>
       </label>
     </div>
   </footer>
@@ -44,18 +41,39 @@ export default {
 .rodape{
   bottom: 0;
   width: 100%;
-  background-color: rgb(31, 31, 31);
-  color: white;
+  background-color: #9eaebe;
 }
-label{
-  padding: 1rem;
-  font-weight: bold;
+@media (max-width: 576px){
+  label{
+    padding: 1vw;
+    font-weight: bold;
+    font-size: smaller;
+  }
+  .hf{
+    padding: 1vh;
+    list-style: none;
+    display: flex;
+    margin-bottom: 0;
+  }
+  .hf li{
+    font-size: medium;
+    margin-right: 2vw;
+  }
 }
-.nav{
-  padding: 1rem;
-}
-.nav li{
-  margin-right: 2rem;
-  font-size: 1.3rem;
+@media (min-width: 992px){
+  label{
+    padding: 1vw;
+    font-weight: bold;
+  }
+  .hf{
+    padding: 1vw;
+    list-style: none;
+    display: flex;
+    margin-bottom: 0;
+  }
+  .hf li{
+    margin-right: 2vw;
+    font-size: x-large;
+  }
 }
 </style>

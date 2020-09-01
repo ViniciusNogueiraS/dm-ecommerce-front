@@ -55,7 +55,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #carouselExampleCaptions{
-  padding-bottom: 1rem;
+  padding-bottom: 1vw;
 }
 .carousel-indicators li{
   height: 10px;
@@ -64,8 +64,16 @@ export default {
 }
 .carousel-item{
   z-index: -1;
+  height: 30%;
 }
-.carousel-item img{
-  height: 25rem;
+@media (min-width: 576px) {
+  .w-100{
+    height: 30vh;
+  }
+}
+@media (min-width: 992px){
+  .w-100{
+    height: 60vh;
+  }
 }
 </style>

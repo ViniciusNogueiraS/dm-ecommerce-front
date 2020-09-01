@@ -28,19 +28,20 @@ export default{
   },
   methods: {
     deslogar: function(){
-
-      runLogout().then(logout => {
-        if (logout.token == null) {
-          this.msgLog = "";
-          this.temSessao = false;
-
-          window.sessionStorage.clear();
-          this.$router.push('/');
-        }
-      })
-      .catch(({response}) => {
-        console.log(response);
-      });
+      if (confirm("Deseja sair do Painel Administrativo?")) {
+        runLogout().then(logout => {
+          if (logout.token == null) {
+            this.msgLog = "";
+            this.temSessao = false;
+  
+            window.sessionStorage.clear();
+            this.$router.push('/');
+          }
+        })
+        .catch(({response}) => {
+          console.log(response);
+        });
+      }
     }
   },
   estiloBarra(link){

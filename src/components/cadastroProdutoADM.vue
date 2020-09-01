@@ -7,7 +7,7 @@
         <label>Nome</label>
         <input class="form-control" type="text" v-model="nome">
         <label>Categoria</label>
-        <select class="form-control" v-model="categoria">
+        <select class="custom-select" v-model="categoria">
           <option v-bind:value="'Acessórios'" :selected="true">Acessórios</option>
           <option v-bind:value="'Calçados'">Calçados</option>
           <option v-bind:value="'Eletrodomésticos'">Eletrodomésticos</option>
@@ -219,8 +219,8 @@ h1{
   margin-top: 0;
 }
 .container{
-  margin-left: 20rem;
-  padding-top: 2rem;
+  margin-left: 20vw;
+  padding-top: 2vw;
 }
 .container input{
   width: 50%;
@@ -234,10 +234,10 @@ h1{
 #imgInput{
   position: absolute;
   left: 60%;
-  top: 7.5rem;
+  top: 7.5vw;
 }
 #output{
-  margin-top: 2.4rem;
+  margin-top: 2.4vw;
 }
 #imgInput .custom-file{
   position: absolute;
