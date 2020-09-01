@@ -305,7 +305,7 @@
             </label>
           </div>
         </div>
-        <router-link class="btn btn-success" to="/">Realizar Compra</router-link><br><br>
+        <button class="btn btn-success" type="button" @click="enviarPedido()">Realizar Compra</button><br><br>
       </div>
     </div>
     <rodape></rodape>
@@ -317,8 +317,9 @@ import Vue from 'vue';
 import app from '../App';
 import cabecalho from './cabecalho';
 import rodape from './rodape';
+import Pedido from '../models/Pedido.js';
 import {somaTotal} from '../resources/helpers.js';
-import {getCarrinho, getProdutoById} from '../services/services.js';
+import {getCarrinho, getProdutoById, inserirPedido} from '../services/services.js';
 
 export default {
   name: 'carrinho',
@@ -345,8 +346,9 @@ export default {
       cidade: '',
       uf: 'AC',
       forma_pagamento: 'boleto',
-      agencia: 0,
-      num_ct_credito: 0
+      num_cartao: '',
+      data_validade: '',
+      codigo_seguranca: ''
     }
   },
   mounted: function(){
@@ -366,7 +368,7 @@ export default {
         this.pedido.push(item);
         this.atualizaTotal();
       })
-      .catch(({response}) => {
+      .catch(response => {
         this.msgCad = response;
         $('#msgCad').toast('show');
       });
@@ -391,6 +393,95 @@ export default {
       });
 
       this.total = somaTotal(precos_descontados);
+    },
+    enviarPedido: function(){
+      if (confirm("Deseja confirmar seu pedido agora?")) {
+        
+        if (this.cliente) {//cliente
+          if (enderecoCad) {
+            var pedido = new Pedido({//com endereco cadastrado
+              idpedido: null,
+              data_criacao: null,
+              visitante: null,
+              cliente: JSON.parse(window.sessionStorage.getItem('cliente')),
+              endereco: JSON.parse(window.sessionStorage.getItem('cliente')).endereco,
+              forma_pagamento: this.forma_pagamento,
+              num_cartao: this.num_cartao,
+              data_validade: this.data_validade,
+              codigo_seguranca: this.codigo_seguranca,
+              items: this.pedido,
+              status: ''
+            });
+  
+            var params = {
+              pedidoClienteEndCad: pedido
+            }
+          }else{
+            var pedido = new Pedido({//com novo endereco
+              idpedido: null,
+              data_criacao: null,
+              visitante: null,
+              cliente: JSON.parse(window.sessionStorage.getItem('cliente')),
+              endereco: {
+                rua: this.rua,
+                numero: this.numero,
+                referencia: this.referencia,
+                bairro: this.bairro,
+                cidade: this.cidade,
+                uf: this.uf
+              },
+              forma_pagamento: this.forma_pagamento,
+              num_cartao: this.num_cartao,
+              data_validade: this.data_validade,
+              codigo_seguranca: this.codigo_seguranca,
+              items: this.pedido,
+              status: ''
+            });
+  
+            var params = {
+              pedidoClienteEndNovo: pedido
+            }
+          }
+        }else{//visitante
+          var pedido = new Pedido({
+            idpedido: null,
+            data_criacao: null,
+            visitante: {
+              nome: this.nome,
+              email: this.email,
+              telefone: this.telefone,
+              cpf: this.cpf,
+            },
+            cliente: null,
+            endereco: {
+              rua: this.rua,
+              numero: this.numero,
+              referencia: this.referencia,
+              bairro: this.bairro,
+              cidade: this.cidade,
+              uf: this.uf
+            },
+            forma_pagamento: this.forma_pagamento,
+            num_cartao: this.num_cartao,
+            data_validade: this.data_validade,
+            codigo_seguranca: this.codigo_seguranca,
+            items: this.pedido,
+            status: ''
+          });
+  
+          var params = {
+            pedidoVisitante: pedido
+          }
+        }
+
+        inserirPedido(params).then(envio => {
+          alert(envio.message);
+
+        }).catch(response => {
+          this.msgCad = response;
+          $('#msgCad').toast('show');
+        });
+      }
     }
   }
 }

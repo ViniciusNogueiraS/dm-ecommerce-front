@@ -1,15 +1,16 @@
 export default class Pedido {
   
-  idpedido;
-	visitante;
+ 	idpedido;
+  data_criacao;
+  visitante;
   cliente;
-  lista; // array[{produto, quantidade}...]
-	endereco;
-	forma_pagamento;
-	agencia;
-	num_ct_credito;
-	data_criacao;
-	status;
+  endereco;
+  forma_pagamento;
+  num_cartao;
+  data_validade;
+  codigo_seguranca;
+  items;
+  status;
   
   constructor(obj) {
     Object.assign(this, obj);

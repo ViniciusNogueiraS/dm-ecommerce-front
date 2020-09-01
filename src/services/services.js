@@ -70,7 +70,7 @@ export function pesquisar(params){
     method: 'GET',
     url: 'produto',
     baseURL: 'http://localhost:3000/',
-    params,
+    params
   })
   .then(response => receptProdutos(response.data));
 }
@@ -98,6 +98,16 @@ export function upImagem(file){
       'x-access-token': window.sessionStorage.getItem('token'),
       'Content-Type': 'multipart/form-data'
     }
+  })
+  .then(response => response.data);
+}
+
+export function inserirPedido(params){
+  return axios({
+    method: 'POST',
+    url: 'pedido',
+    baseURL: 'http://localhost:3000/',
+    data: params
   })
   .then(response => response.data);
 }

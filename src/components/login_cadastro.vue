@@ -27,7 +27,11 @@
         <input class="form-control" type="password" placeholder="Senha" v-model="senha">
         <input class="form-control" type="text" placeholder="Telefone" v-model="telefone">
         <input class="form-control" type="text" placeholder="CPF" v-model="cpf">
-        <h2>Endereço</h2>
+        <b>Cartão de Crédito</b><br><br>
+        <input class="form-control" type="text" placeholder="Número do Cartão" v-model="num_cartao">
+        <input class="form-control" type="text" placeholder="Data de Validade" v-model="data_validade">
+        <input class="form-control" type="text" placeholder="Código de Segurança" v-model="codigo_seguranca">
+        <b>Endereço</b><br><br>
         <div id="msgCad" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="8000">
           <div class="toast-body">
             {{msgCad}}
@@ -82,6 +86,7 @@
 import Vue from 'vue';
 import cabecalho from './cabecalho';
 import rodape from './rodape';
+import Cliente from '../models/Cliente.js';
 import {runLogin, runCadastro} from '../services/services.js';
 
 export default{
@@ -104,6 +109,9 @@ export default{
       senha: '',
       telefone: '',
       cpf: '',
+      num_cartao: '',
+      data_validade: '',
+      codigo_seguranca: '',
       rua: '',
       numero: '',
       referencia: '',
@@ -117,21 +125,26 @@ export default{
       this.loadC = true;
 
       var params = {
-        nome: this.nome,
-        email: this.email,
-        senha: this.senha,
-        telefone: this.telefone,
-        cpf: this.cpf,
-        endereco: {
-          rua: this.rua,
-          numero: this.numero,
-          referencia: this.referencia,
-          bairro: this.bairro,
-          cidade: this.cidade,
-          uf: this.uf
-        }
+        cliente: new Cliente({
+          nome: this.nome,
+          email: this.email,
+          senha: this.senha,
+          telefone: this.telefone,
+          cpf: this.cpf,
+          num_cartao: this.num_cartao,
+          data_validade: this.data_validade,
+          codigo_seguranca: this.codigo_seguranca,
+          endereco: {
+            rua: this.rua,
+            numero: this.numero,
+            referencia: this.referencia,
+            bairro: this.bairro,
+            cidade: this.cidade,
+            uf: this.uf
+          }
+        })
       }
-
+      
       runCadastro(params).then(cadastro => {
         this.$router.push('/');
       })
